@@ -25,10 +25,13 @@ jobs:
           fetch-depth: 1
       - name: Get faas-cli
         run: curl -sLSf https://cli.openfaas.com | sudo sh
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
+
       - name: Get TAG
         id: get_tag
         run: echo ::set-output name=TAG::latest-dev
@@ -49,18 +52,17 @@ jobs:
       #   run: >
       #     faas-cli template pull https://github.com/openfaas/python-flask-template
 
-      - name: faas-cli template pull
-        run: >
-          faas-cli template pull
+      # - name: faas-cli template pull
+      #   run: >
+      #     faas-cli template pull
 
-      - name: faas-cli template store pull python3-http
-        run: >
-          faas-cli template store pull python3-http
+      # - name: faas-cli template store pull python3-http
+      #   run: >
+      #     faas-cli template store pull python3-http
 
-      - name: faas-cli template store pull dockerfile
-        run: >
-          faas-cli template store pull dockerfile
-        continue-on-error: true
+      # - name: faas-cli template store pull dockerfile
+      #   run: >
+      #     faas-cli template store pull dockerfile
 
       - name: Publish functions
         run: >
@@ -70,3 +72,13 @@ jobs:
           --extra-tag ${{ github.sha }}
           --platforms linux/arm/v7,linux/arm64,linux/amd64
         continue-on-error: true
+
+      # @TODO text this next
+      # - name: Publish functions
+      #   run: >
+      #     OWNER="${{ steps.get_repo_owner.outputs.repo_owner }}" 
+      #     TAG="latest"
+      #     faas-cli publish
+      #     --extra-tag ${{ github.sha }}
+      #     --platforms linux/amd64
+      #   continue-on-error: true
