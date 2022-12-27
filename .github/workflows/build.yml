@@ -20,17 +20,20 @@ jobs:
       checks: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 1
+
       - name: Get faas-cli
         run: curl -sLSf https://cli.openfaas.com | sudo sh
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v1
+      - # Add support for more platforms with QEMU (optional)
+        # https://github.com/docker/setup-qemu-action
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v1
+        uses: docker/setup-buildx-action@v2
 
       - name: Get TAG
         id: get_tag
@@ -64,21 +67,22 @@ jobs:
       #   run: >
       #     faas-cli template store pull dockerfile
 
-      - name: Publish functions
-        run: >
-          OWNER="${{ steps.get_repo_owner.outputs.repo_owner }}" 
-          TAG="latest"
-          faas-cli publish
-          --extra-tag ${{ github.sha }}
-          --platforms linux/arm/v7,linux/arm64,linux/amd64
-        continue-on-error: true
-
-      # @TODO text this next
       # - name: Publish functions
       #   run: >
       #     OWNER="${{ steps.get_repo_owner.outputs.repo_owner }}" 
       #     TAG="latest"
       #     faas-cli publish
       #     --extra-tag ${{ github.sha }}
-      #     --platforms linux/amd64
+      #     --platforms linux/arm/v7,linux/arm64,linux/amd64
       #   continue-on-error: true
+
+      # @TODO text this next
+      - name: Publish functions
+        run: >
+          OWNER="${{ steps.get_repo_owner.outputs.repo_owner }}" 
+          TAG="latest"
+          faas-cli publish
+          --extra-tag ${{ github.sha }}
+          --platforms linux/amd64
+          --filter "api-*"
+        continue-on-error: true
