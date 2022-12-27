@@ -38,11 +38,13 @@ jobs:
       - name: Get TAG
         id: get_tag
         run: echo ::set-output name=TAG::latest-dev
+
       - name: Get Repo Owner
         id: get_repo_owner
         run: >
           echo ::set-output name=repo_owner::$(echo ${{ github.repository_owner }} |
           tr '[:upper:]' '[:lower:]')
+
       - name: Docker Login
         run: > 
           echo ${{ secrets.GITHUB_TOKEN }} | 
@@ -76,13 +78,23 @@ jobs:
       #     --platforms linux/arm/v7,linux/arm64,linux/amd64
       #   continue-on-error: true
 
+      # # @TODO text this next
+      # - name: Publish functions
+      #   run: >
+      #     OWNER="${{ steps.get_repo_owner.outputs.repo_owner }}" 
+      #     TAG="latest"
+      #     faas-cli publish
+      #     --extra-tag "${{ github.sha }}"
+      #     --platforms linux/amd64
+      #     --filter "api-*"
+      #   continue-on-error: true
+
       # @TODO text this next
       - name: Publish functions
         run: >
           OWNER="${{ steps.get_repo_owner.outputs.repo_owner }}" 
           TAG="latest"
           faas-cli publish
-          --extra-tag ${{ github.sha }}
           --platforms linux/amd64
           --filter "api-*"
         continue-on-error: true
