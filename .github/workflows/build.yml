@@ -89,12 +89,20 @@ jobs:
       #     --filter "api-*"
       #   continue-on-error: true
 
-      # @TODO text this next
+      # # @TODO text this next
+      # - name: Publish functions
+      #   run: >
+      #     OWNER="${{ steps.get_repo_owner.outputs.repo_owner }}" 
+      #     TAG="latest"
+      #     faas-cli publish
+      #     --platforms linux/amd64
+      #     --filter "api-*"
+      #   continue-on-error: true
+
       - name: Publish functions
         run: >
           OWNER="${{ steps.get_repo_owner.outputs.repo_owner }}" 
           TAG="latest"
           faas-cli publish
           --platforms linux/amd64
-          --filter "api-*"
         continue-on-error: true
