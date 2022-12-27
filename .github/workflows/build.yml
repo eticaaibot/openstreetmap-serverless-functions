@@ -59,9 +59,9 @@ jobs:
       #   run: >
       #     faas-cli template pull
 
-      # - name: faas-cli template store pull python3-http
-      #   run: >
-      #     faas-cli template store pull python3-http
+      - name: faas-cli template store pull python3-http
+        run: >
+          faas-cli template store pull python3-http
 
       # - name: faas-cli template store pull dockerfile
       #   run: >
